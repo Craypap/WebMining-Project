@@ -9,12 +9,12 @@ import scrapy
 
 
 #create class to scrape data
-class QuotesSpider(scrapy.Spider):
+class MarmitonSpider(scrapy.Spider):
     # name of the spider
-    name = 'quotes'
+    name = 'marmiton'
 
     def start_requests(self):
-        start_urls = ['https://www.1001cocktails.com/recettes/selection_short-drinks.aspx']
+        start_urls = ['https://www.marmiton.org/recettes/index/categorie/plat-principal/']
         for url in start_urls:
             yield scrapy.Request(url=url, callback=self.parse, meta={'is_it_first_search':True, 'should_explore_more':True})
 
@@ -57,4 +57,8 @@ class QuotesSpider(scrapy.Spider):
                     next_page = page.css('a::attr(href)').get()
                     next_page = response.urljoin(next_page)
                     yield scrapy.Request(next_page, callback=self.parse, meta={'is_it_first_search':False, 'should_explore_more':should_explore_more})
-                    
+
+
+
+
+
