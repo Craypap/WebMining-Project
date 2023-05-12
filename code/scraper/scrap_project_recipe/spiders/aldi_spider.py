@@ -7,7 +7,7 @@ class AldiSpider(scrapy.Spider):
     name = 'aldi'
 
     def start_requests(self):
-        start_urls = ['https://www.aldi-now.ch/fr/nouveau-dans-la-boutique-en-ligne?ipp=72&page=1#']
+        start_urls = ['https://www.aldi-now.ch/fr/nouveau-dans-la-boutique-en-ligne?ipp=72']
         for url in start_urls:
             yield scrapy.Request(url=url, callback=self.parse_categories)
 
@@ -31,7 +31,10 @@ class AldiSpider(scrapy.Spider):
                 'name': item.css('.product-item__name::text').get().strip(),
                 'weight': weight.strip(),
                 'price_per_unit': price_per_unit.strip(),
-                'price': item.css('.money-price__amount::text').get().strip()
+                'price': item.css('.money-price__amount::text').get().strip(),
+                #href="/fr/knorr-soupe-aux-nouilles-poulet/8859167326209" 
+                'url': response.urljoin(item.css('.product-item__overlay::attr(href)').get()),
+
             }
         #changer de page
         next_page = response.css('.pagination__step--next::attr(href)').get()
