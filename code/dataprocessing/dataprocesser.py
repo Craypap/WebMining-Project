@@ -118,7 +118,5 @@ class DataProcesser:
         # write to file
         outfile = open(self.OUTPUT_PATH + "usp.json", "w", encoding='utf8')
         json.dump(output, outfile, ensure_ascii=False)
-        outfile.flush()
-        os.fsync(outfile.fileno())
         outfile.close()
 
