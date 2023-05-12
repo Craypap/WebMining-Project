@@ -27,6 +27,7 @@ __date__ = "05.05.2023"
 
 
 class DataProcesser:
+    OUTPUT_PATH: str = "../"
 
     def __init__(self):
         """
@@ -38,6 +39,14 @@ class DataProcesser:
         """
         This method process the data scraped from aldi
         :param path_to_json: path to the json file with data scraped from aldi
+        POST : json file with ingredient in a standard format
+        """
+        pass
+
+    def parse_marmiton(self, path_to_json: str) -> None:
+        """
+        This method process the data scraped from marmiton
+        :param path_to_json: path to the json file with data scraped from marmiton
         POST : json file with ingredient in a standard format
         """
         pass
