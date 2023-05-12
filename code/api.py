@@ -59,7 +59,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # components
 analyser: DataAnalyser = DataAnalyser()
 processer: DataProcesser = DataProcesser()
@@ -75,7 +74,9 @@ async def root():
 @app.on_event("startup")
 async def startup_event():
     # TODO : Code before API up (run scraper, ...)
-    pass
+    print("------ Processing data scraped... ------")
+    processer.parse_usp("scraper/usp_output.json")
+    print("------ Data processed ------------------")
 
 
 @app.get("/test")
