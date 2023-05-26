@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {NotFoundDialogComponent} from "./not-found-dialog/not-found-dialog.component";
+import {RequestService} from "../../service/request.service";
 
 @Component({
   selector: 'app-search',
@@ -11,27 +12,37 @@ export class SearchComponent {
 
   recipe: any;
   isSearch: boolean = false;
-  notFoundMessage: string = "";
 
-  constructor(public dialog: MatDialog) {
-  }
+  constructor(public dialog: MatDialog, private req: RequestService) {}
 
   search(query: string) {
     //clear error
-    this.notFoundMessage = "";
     this.isSearch = true;
-    //TODO: search request to AP
+    //search request to AP
+    this.req.get_recipe(query).subscribe(
+      res => {
+        this.isSearch = false;
+        this.recipe = res;
+      },
+      error => {
+        this.isSearch = false;
+        this.openDialog(query);
+      }
+    );
     this.isSearch = false;
+  }
+
+  canShowRecipe(): boolean {
+    return this.recipe != null;
+  }
+
+  private openDialog(query: string): void {
     let dialogRef = this.dialog.open(NotFoundDialogComponent, {
       data: {
         query: query,
       }
     });
     dialogRef.disableClose = true
-  }
-
-  canShowRecipe(): boolean {
-    return this.recipe != null;
   }
 }
 

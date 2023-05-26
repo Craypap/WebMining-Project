@@ -18,6 +18,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgOptimizedImage} from "@angular/common";
 import { NotFoundDialogComponent } from './views/search/not-found-dialog/not-found-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatDividerModule,
     MatProgressSpinnerModule,
     NgOptimizedImage,
-    MatDialogModule
+    MatDialogModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
