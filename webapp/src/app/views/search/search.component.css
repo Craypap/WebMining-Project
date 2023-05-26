@@ -1,0 +1,14 @@
+button {
+  width: 100%;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+div#searchDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
