@@ -16,13 +16,16 @@ import {FormsModule} from "@angular/forms";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgOptimizedImage} from "@angular/common";
+import { NotFoundDialogComponent } from './views/search/not-found-dialog/not-found-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     RecipeComponent,
-    HomeComponent
+    HomeComponent,
+    NotFoundDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,8 @@ import {NgOptimizedImage} from "@angular/common";
     FormsModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,6 +6,7 @@
   </mat-form-field>
   <button mat-raised-button color="primary" (click)="search(query.value)">Trouve moi le prix<mat-icon>search</mat-icon></button>
 </form>
+
 <!-- LOAD VIEW -->
 <div id="searchDiv">
   <mat-spinner *ngIf="isSearch" color="primary" [diameter]="60"></mat-spinner>

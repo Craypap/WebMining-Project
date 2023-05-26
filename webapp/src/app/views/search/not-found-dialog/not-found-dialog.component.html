@@ -1,0 +1,14 @@
+<h2>Oups...</h2>
+<div id="errorImg">
+  <img id="error" src="assets/cat.png" alt="cat_crying">
+</div>
+<div id="message">
+  <p>
+    Malheureusement, nous n'avons pas trouvé de résultat pour votre recherche
+    "<span class="bold">{{data.query}}</span>"
+  </p>
+</div>
+<div mat-dialog-actions class="buttons">
+  <button mat-flat-button color="primary" (click)="dialogRef.close()">Ok</button>
+</div>
+
