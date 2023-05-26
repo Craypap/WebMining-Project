@@ -19,25 +19,51 @@
 # SOFTWARE.
 
 """
-File containing a driver class for ElasticSearch
+File containing a indexer class for ElasticSearch
 """
 
 __authors__ = "Anthony Gugler, Florian Hofmann, Jérémy Jordan"
-__date__ = "05.05.2023"
+__date__ = "26.05.2023"
 
+import json
 from elasticsearch import Elasticsearch
 
 
 class ElasticDriver:
 
-    def __init__(self, host: str, port: int, user: str, password: str):
+    def __init__(self, host: str='localhost', port: int=9200, user: str='user', password: str='password', scheme: str='http'):
         """
         Constructor
 
         @param host: The host of the ElasticSearch server
         @param port: The port of the ElasticSearch server
-        @param user: The user to connect to the ElasticSearch server
-        @param password: The password to connect to the ElasticSearch server
+        @param user: The user 
+        @param password: The password 
+        @param scheme: The scheme to use for connecting to the ElasticSearch.
+        all param have default value
         """
-        self.elastic: Elasticsearch([host], http_auth=(user, password), port=port)
-        pass
+        self.elastic = Elasticsearch(hosts=[{'host': host, 'port': port, 'scheme': scheme}], http_auth=(user, password))
+
+    def index_data(self, index_name: str, file_path: str):
+        """
+        Function to index JSON data file into index in ElasticSearch
+
+        @param index_name: Name of the index
+        @param file_path: Path to the JSON data file
+        """
+        # Open and load JSON data file
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        # Index data into Elasticsearch
+        for i, doc in enumerate(data):
+            self.elastic.index(index=index_name, id=i, document=doc)
+        print("Data indexing completed")
+
+
+# if __name__ == "__main__":
+#     driver = ElasticDriver()
+#     driver.index_data('test2', 'test.json')
+
+
+
