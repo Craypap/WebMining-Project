@@ -140,7 +140,8 @@ class MarmitonSpider(scrapy.Spider):
                 'category': response.meta['category'],
                 'price_range': price_range,
                 'servings_quantity': response.css('span.SHRD__sc-w4kph7-4.knYsyq::text').get(), #for how many people
-                'ingredients': ingredients
+                'ingredients': ingredients,
+                'url': response.url
         }
 
 

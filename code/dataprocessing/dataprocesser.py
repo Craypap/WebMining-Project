@@ -217,12 +217,12 @@ class DataProcesser:
             data_aldi = json.load(f)
 
         data_items = data_ups + data_aldi
-
         
         print("Le nombre d'item aldi est de : "+str(len(data_aldi)))
         print("Le nombre d'item usp est de : "+str(len(data_ups)))
-
         print("Le nombre d'item total dans la liste est de : "+str(len(data_items)))
+        
+        print("\n############### Le traitement a commencé ###############")
 
         # for each item, check the full name of the item and check if there is a match in ingredient.
         # if there is a match, add the ingredient to the item under it's ingredient field
@@ -233,7 +233,7 @@ class DataProcesser:
             # check the progress and display how many item has been processed
             count += 1
             if count % 500 == 0:
-                print("Number processed item is : "+str(count))
+                print("Nombre d'item traité est : "+str(count)+" sur "+str(len(data_aldi)+len(data_ups)))
 
             item_name = item["name"]
             
@@ -286,24 +286,46 @@ class DataProcesser:
                         break
                 if item["ingredient"] != "":
                     break
+            
+            other_ingredients = []
+            
+            # Check if the ingredient has other one that can be affiliate (like carotte, there is also "carotte rapé") 
+            if item["ingredient"] != "":
+                for ingredient in ingredients_name_list_sorted:
+                    if item["ingredient"] in ingredient:
+                        if item["ingredient"] != ingredient:
+                            other_ingredients.append(ingredient)
+                            
+            item["other_ingredients"] = other_ingredients
+            
+        print("############### Le traitement est terminé ###############\n")
 
         # count the number of item in the list where the ingredient field is not empty
         count_item = 0
-        for item in data_items:
-            if item["ingredient"] == "":
+        for i in data_items:
+            if i["ingredient"] == "":
                 count_item += 1
 
         print("Le nombre d'item qui n'est pas affilié à un ingrédent est : "+str(count_item))
 
         # count the number of ingredient that doesn't have an item to liked with
         count_ingredient = 0
+        count_other_ingredient = 0
         for ingredient in ingredients_name_list_sorted:
-            for item in data_items:
-                if ingredient == item["ingredient"]:
+            for i in data_items:
+                if ingredient == i["ingredient"]:
                     count_ingredient += 1
                     break
-
-        print("Le nombre d'ingrédient qui n'a pas d'item affilié est : "+str(count_ingredient))
+                    
+        #for ingredient in ingredients_name_list_sorted:
+        #    for i in data_items:
+        #        if ingredient in i["other_ingredients"]:
+        #            count_other_ingredient += 1
+        #            break
+        #                
+        print("Le nombre d'ingrédient qui possède une affiliation principal  (ingredient) : "+str(count_ingredient))
+        #print("Le nombre d'ingrédient qui possède une affiliation secondaire (other_ingredients) : "+str(count_other_ingredient))
+        print("Le nombre d'ingrédient qui n'a pas d'item affilié est : "+str(len(ingredients_name_list_sorted)-count_ingredient-count_other_ingredient))
 
         # Save the list of items affiliated (or not) to an ingredient to a new JSON file
         outfile = open(self.OUTPUT_PATH + OUTPUT_FILENAME_ITEMS, "w", encoding='utf8')
