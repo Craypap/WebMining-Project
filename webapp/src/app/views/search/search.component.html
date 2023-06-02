@@ -1,0 +1,17 @@
+<!-- SEARCH VIEW -->
+<form class="search-form" *ngIf="!canShowRecipe() && !isSearch">
+  <mat-form-field class="browse-input" appearance="fill">
+    <mat-label>Tapez une recette...</mat-label>
+    <input matInput id="search" name="search" #query value="">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="search(query.value)">Trouve moi le prix<mat-icon>search</mat-icon></button>
+  <p id="actuation">Actualisation des données : {{lastActuation}}</p>
+</form>
+
+<!-- LOAD VIEW -->
+<div id="searchDiv">
+  <mat-spinner *ngIf="isSearch" color="primary" [diameter]="60"></mat-spinner>
+</div>
+
+<!-- RESULT VIEW -->
+<app-recipe *ngIf="canShowRecipe() && !isSearch" [recipe]="recipe" (clearRecipe)="clearRecipe()"></app-recipe>

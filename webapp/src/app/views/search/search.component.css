@@ -1,0 +1,35 @@
+button {
+  width: 100%;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+div#searchDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+div#message{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+div#message p{
+  margin: auto;
+}
+
+img#error{
+  width: 100px;
+}
+
+p#actuation{
+  color: #808080;
+  margin: 5px;
+  text-align: center;
+}

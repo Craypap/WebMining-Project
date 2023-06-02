@@ -1,0 +1,37 @@
+/* ==========================================================================
+  Layout
+  ========================================================================== */
+h2{
+  margin-top: 15px;
+  text-align: center;
+}
+
+div.buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+div#errorImg{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+img#error{
+  margin: auto;
+  width: 100px;
+}
+
+div#message{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-width: 300px;
+  width: 90vw;
+  padding: 10px;
+}
+
+span.bold{
+  font-weight: bold;
+}

@@ -1,0 +1,13 @@
+button {
+  width: 100%;
+}
+
+table{
+  width: 100%;
+}
+
+p.info{
+  color: #808080;
+  margin: 2px;
+  font-size: 8pt;
+}
