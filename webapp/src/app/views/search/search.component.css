@@ -27,3 +27,9 @@ div#message p{
 img#error{
   width: 100px;
 }
+
+p#actuation{
+  color: #808080;
+  margin: 5px;
+  text-align: center;
+}

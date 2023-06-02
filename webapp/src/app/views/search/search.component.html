@@ -5,6 +5,7 @@
     <input matInput id="search" name="search" #query value="">
   </mat-form-field>
   <button mat-raised-button color="primary" (click)="search(query.value)">Trouve moi le prix<mat-icon>search</mat-icon></button>
+  <p id="actuation">Actualisation des données : {{lastActuation}}</p>
 </form>
 
 <!-- LOAD VIEW -->
@@ -12,7 +13,5 @@
   <mat-spinner *ngIf="isSearch" color="primary" [diameter]="60"></mat-spinner>
 </div>
 
-
-
 <!-- RESULT VIEW -->
-<app-recipe *ngIf="canShowRecipe() && !isSearch"></app-recipe>
+<app-recipe *ngIf="canShowRecipe() && !isSearch" [recipe]="recipe" (clearRecipe)="clearRecipe()"></app-recipe>

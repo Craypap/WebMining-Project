@@ -1,1 +1,25 @@
-<p>recipe works!</p>
+<p>Voici le résultat de votre recheche :</p>
+<div>
+  <h2>{{recipe.name}}</h2>
+  <p>{{recipe.type}}</p>
+</div>
+<div>
+  <h3>Ingrédients<sup>*</sup></h3>
+  <table>
+    <tr>
+      <th>Ingrédient</th>
+      <th>Prix<sup>**</sup></th>
+      <th>Prix/kg</th>
+      <th>Article</th>
+    </tr>
+    <tr *ngFor="let item of recipe.ingredients">
+      <td>{{item.name}}</td>
+      <td>{{item.price}}.-</td>
+      <td>{{item.price}}.-</td>
+      <td><button mat-raised-button (click)="window.open(item.link)"><mat-icon>shopping_cart</mat-icon></button></td>
+    </tr>
+  </table>
+</div>
+<p class="info"><sup>*</sup> Les recettes sont tirée de Marmitton.fr</p>
+<p class="info"><sup>**</sup> Les prix sont basé sur Aldi.ch et USP.ch</p>
+<button mat-raised-button color="primary" (click)="clearRecipe.emit()">Nouvelle recherche</button>

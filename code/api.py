@@ -26,9 +26,10 @@ __authors__ = "Anthony Gugler, Florian Hofmann, Jérémy Jordan"
 __date__ = "05.05.2023"
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from datetime import datetime
 from analyser.analyse import DataAnalyser
 from dataprocessing.dataprocesser import DataProcesser
 from elasticdriver.elastic import ElasticDriver
@@ -75,13 +76,45 @@ async def root():
 async def startup_event():
     # TODO : Code before API up (run scraper, ...)
     print("------ Processing data scraped... ------")
-    processer.parse_usp("scraper/usp_output.json")
+    # processer.parse_usp("scraper/usp_output.json")
     print("------ Data processed ------------------")
 
 
-@app.get("/test")
-async def test():
-    return {"message": "Hello World"}
+@app.get("/recipe/{query}")
+async def recipe(query: str):
+    if query == "test":
+        return {
+            "name": "Fondue au Fromage",
+            "type": "plat-principal",
+            "ingredients": [
+                {
+                    "name": "Fromage",
+                    "price": 5.0,
+                    "link": "https://google.ch"
+                },
+                {
+                    "name": "Pain",
+                    "price": 2.0,
+                    "link": "https://google.ch"
+                }
+            ]
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+
+@app.get("/date")
+async def last_action_date():
+    # read value from last_action_date.txt
+    timestamp: int
+    with open("last_action_timestamp.txt", "r") as f:
+        timestamp = int(f.read())
+    # convert timestamp to date
+    dt_object = datetime.fromtimestamp(timestamp)
+    # return date
+    return {
+        "last_action_date": str(dt_object)
+    }
 
 
 if __name__ == '__main__':

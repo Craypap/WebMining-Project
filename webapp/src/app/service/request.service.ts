@@ -26,4 +26,11 @@ export class RequestService {
   get_recipe(query: string): Observable<any> {
     return this.http.get<any>(this.baseUrl + "/recipe/"+query)
   }
+
+  /**
+   * Do the request to get the last actuation date
+   */
+  get_date(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + "/date")
+  }
 }

@@ -12,8 +12,11 @@ export class SearchComponent {
 
   recipe: any;
   isSearch: boolean = false;
+  lastActuation: string = "-";
 
-  constructor(public dialog: MatDialog, private req: RequestService) {}
+  constructor(public dialog: MatDialog, private req: RequestService) {
+    this.getLatestActuation();
+  }
 
   search(query: string) {
     //clear error
@@ -32,8 +35,20 @@ export class SearchComponent {
     this.isSearch = false;
   }
 
+  private getLatestActuation() {
+    this.req.get_date().subscribe(
+      res => {
+        this.lastActuation = res.last_action_date;
+      }
+    );
+  }
+
   canShowRecipe(): boolean {
     return this.recipe != null;
+  }
+
+  clearRecipe() {
+    this.recipe = null;
   }
 
   private openDialog(query: string): void {

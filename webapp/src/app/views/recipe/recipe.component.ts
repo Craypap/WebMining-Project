@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-recipe',
@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class RecipeComponent {
 
+  @Input() recipe: any = {}
+  @Output() clearRecipe = new EventEmitter()
+  protected readonly window = window;
 }
