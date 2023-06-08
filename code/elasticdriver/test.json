@@ -1,0 +1,32 @@
+[{
+    "source": "ALDI",
+    "name": "Maïs doux frais pack de 2",
+    "price_kg": 1.5,
+    "price": 2.99,
+    "ingredient": "",
+    "link": "https://www.aldi-now.ch/fr/mais-doux-frais-pack-de-2/99-70898"
+},
+{
+    "source": "ALDI",
+    "name": "NATURE'S GOLD Cornichons pour sandwich",
+    "price_kg": 5.8,
+    "price": 1.69,
+    "ingredient": "",
+    "link": "https://www.aldi-now.ch/fr/natures-gold-cornichons-pour-sandwich/00-8908218073089"
+},
+{
+    "source": "ALDI",
+    "name": "Abricots 500g",
+    "price_kg": 4.8,
+    "price": 2.39,
+    "ingredient": "",
+    "link": "https://www.aldi-now.ch/fr/abricots-500g/99-61729"
+},
+{
+    "source": "ALDI",
+    "name": "BBQ Petits pains, fromage",
+    "price_kg": 8.0,
+    "price": 1.99,
+    "ingredient": "",
+    "link": "https://www.aldi-now.ch/fr/bbq-petits-pains-fromage/00"
+}]
