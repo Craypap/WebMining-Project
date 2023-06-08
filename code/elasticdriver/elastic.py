@@ -61,9 +61,10 @@ class ElasticDriver:
         print("Data indexing completed")
 
 
-# if __name__ == "__main__":
-#     driver = ElasticDriver()
-#     driver.index_data('test2', 'test.json')
+if __name__ == "__main__":
+    driver = ElasticDriver()
+    #driver.index_data('recipe_marmiton', 'recipe_marmiton.json')
+    driver.index_data('items_ingredient', 'items_ingredient.json')
 
 
 
