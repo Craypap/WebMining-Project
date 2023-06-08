@@ -35,8 +35,8 @@ pip install scrapy
 ## Structure
 The project contains several directories:
 
-code — Contains the main project source code.
-data — Holds data files, such as the database file and any other resources needed.
-doc — Includes documentation files explaining the project and its use.
-scrap_project_recipe — Contains the Scrapy spiders used for scraping data from the websites.
-webapp — Contains the source code for the web application interface.
+- code — Contains the main project source code.
+- data — Holds data files, such as the database file and any other resources needed.
+- doc — Includes documentation files explaining the project and its use.
+- scrap_project_recipe — Contains the Scrapy spiders used for scraping data from the websites.
+- webapp — Contains the source code for the web application interface.
