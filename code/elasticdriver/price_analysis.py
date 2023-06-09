@@ -88,13 +88,6 @@ class PriceAnalysis:
             return 0
 
     def get_price_for_recipe(self, recipe_id, recipe_index='recipe_marmiton', price_index='items_ingredient'):
-        """
-        Get the total cost of a recipe
-        :param recipe_id: string
-        :param recipe_index: string
-        :param price_index: string
-        :return: None
-        """
         # Get the recipe from the elastic search
         try:
             recipe = self.elastic.get(index=recipe_index, id=recipe_id)['_source']
@@ -112,6 +105,7 @@ class PriceAnalysis:
             'Direct price': 0,
             'Price per kg': 0
         }
+
         ingredient_prices = {}
 
         # Loop through ingredients
@@ -121,8 +115,10 @@ class PriceAnalysis:
 
             # If the ingredient price is found
             for price in prices:
-                if ingredient['name'] in ingredient_prices:
+                source_ingredient_key = f"{price['source']}-{ingredient['name']}"
+                if source_ingredient_key in ingredient_prices:
                     continue
+
                 cost_kg = price.get('price_kg', 0)
                 direct_price = price.get('price', 0)
                 quantity_price = self.get_price_by_quantity(ingredient['quantity'], price)
@@ -144,7 +140,7 @@ class PriceAnalysis:
                     total_cost_usp['Direct price'] += direct_price if direct_price > 0 else 0
                     total_cost_usp['Price per kg'] += cost_kg if cost_kg > 0 else 0
 
-                ingredient_prices[ingredient['name']] = True
+                ingredient_prices[source_ingredient_key] = True
 
         print(f'Total cost for ALDI:')
         for key, value in total_cost_aldi.items():
@@ -157,4 +153,4 @@ class PriceAnalysis:
 
 if __name__ == "__main__":
     price_analysis = PriceAnalysis()
-    price_analysis.get_price_for_recipe('950')
+    price_analysis.get_price_for_recipe('161')
