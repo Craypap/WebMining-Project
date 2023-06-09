@@ -45,8 +45,11 @@ class PriceAnalysis:
         # Prepare the search query
         query = {
             "query": {
-                "match": {
-                    "other_ingredients": ingredient_name
+                "bool": {
+                    "should": [
+                        {"match": {"ingredient": ingredient_name}},
+                        {"match": {"other_ingredients": ingredient_name}}
+                    ]
                 }
             }
         }
