@@ -61,37 +61,29 @@ class PriceAnalysis:
         return [hit['_source'] for hit in res['hits']['hits']]
 
     @staticmethod
-    def get_price_by_quantity(quantity, price):
+    def get_price_by_quantity(quantity_str, price):
         """
         Calculate the price according to the quantity
-        :param quantity: str
+        :param quantity_str: str
         :param price: Dict
         :return: float
         """
-        # Check if the quantity has a unit
-        if ' ' in quantity:
-            # Parse quantity and convert to kg
-            quantity_value, quantity_unit = quantity.split(' ', 1)
-        else:
-            # If no unit is provided
-            quantity_value = quantity
-            quantity_unit = 'kg'
+        quantity_str = quantity_str.lower()
+        quantity = 0
 
-        quantity_value = float(quantity_value)
-
-        if quantity_unit.lower() in ['g', 'gram', 'grams']:
-            quantity_value /= 1000
-        elif quantity_unit.lower() in ['cl', 'centiliter', 'centiliters']:
-            quantity_value /= 100
-        elif quantity_unit.lower() in ['l', 'liter', 'liters']:
-            quantity_value *= 1  # Already in kg equivalent
-        else:  # Unit not recognized
-            quantity_value = 0
+        if 'g' in quantity_str:  # grams
+            quantity = float(quantity_str.split()[0]) / 1000
+        elif 'verres' in quantity_str:  # glasses
+            quantity = float(quantity_str.split()[0]) * 0.2
+        elif 'petite tasse' in quantity_str:  # small cup
+            quantity = float(quantity_str.split()[0]) * 0.1
+        elif quantity_str.isdigit():  # plain number
+            quantity = float(quantity_str)
 
         if 'price_kg' in price:
-            return quantity_value * price['price_kg']
+            return quantity * price['price_kg']
         elif 'price' in price:
-            return quantity_value * price['price']
+            return quantity * price['price']
         else:
             return 0
 
@@ -130,31 +122,29 @@ class PriceAnalysis:
             # If the ingredient price is found
             for price in prices:
                 if ingredient['name'] in ingredient_prices:
-                    continue  # Skip if ingredient seen
+                    continue
                 cost_kg = price.get('price_kg', 0)
                 direct_price = price.get('price', 0)
                 quantity_price = self.get_price_by_quantity(ingredient['quantity'], price)
 
                 print(f'Source: {price["source"]}')
                 print(f'Ingredient: {ingredient["name"]}')
-                print(f'Raw Price per kg: {cost_kg}')
-                print(f'Raw Direct price: {direct_price}')
-                print(f'Raw Price according to quantity: {quantity_price}')
+                print(f'Price per kg: {cost_kg}')
+                print(f'Direct price: {direct_price}')
+                print(f'Price according to quantity: {quantity_price}')
                 print('-' * 29)
 
-                # Update the total cost for each source
-                #todo adapter la calculation du prix
-                if price["source"] == 'aldi':
+                # Update the total
+                if price["source"] == 'ALDI':
                     total_cost_aldi['Price according to quantity'] += quantity_price
-                    total_cost_aldi['Direct price'] += direct_price
-                    total_cost_aldi['Price per kg'] += cost_kg
-                elif price["source"] == 'usp':
+                    total_cost_aldi['Direct price'] += direct_price if direct_price > 0 else 0
+                    total_cost_aldi['Price per kg'] += cost_kg if cost_kg > 0 else 0
+                elif price["source"] == 'USP':
                     total_cost_usp['Price according to quantity'] += quantity_price
-                    total_cost_usp['Direct price'] += direct_price
-                    total_cost_usp['Price per kg'] += cost_kg
+                    total_cost_usp['Direct price'] += direct_price if direct_price > 0 else 0
+                    total_cost_usp['Price per kg'] += cost_kg if cost_kg > 0 else 0
 
                 ingredient_prices[ingredient['name']] = True
-
 
         print(f'Total cost for ALDI:')
         for key, value in total_cost_aldi.items():
