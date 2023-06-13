@@ -76,9 +76,12 @@ class PriceAnalysis:
         query = {
             "query": {
                 "bool": {
+                    "must": [
+                        {"match": {"source": "ALDI"}}
+                    ],
                     "should": [
                         {"match": {"name": ingredient_name}},
-                        {"match": {"source": "ALDI"}}
+                        {"match": {"ingredient": ingredient_name}},
                     ]
                 }
             }
@@ -88,7 +91,7 @@ class PriceAnalysis:
 
         # If no match found, return empty list
         if res['hits']['total']['value'] == 0:
-            return []
+            return [[], []]
 
         # Return best match and all other matches
         return [res['hits']['hits'][0]['_source'], res['hits']['hits']]
@@ -241,6 +244,8 @@ class PriceAnalysis:
         # query each ingredient and keep the best match
         for i in range(len(best_match['ingredients'])):
             prices, others = self.get_price_from_ingredient_aldi(best_match['ingredients'][i]['name'], price_index)
+            if len(prices) == 0 and len(others) == 0:
+                continue
             # keep 6 first results and add them to the return object
             others = others[:6]
             tmp: list = []
