@@ -63,7 +63,7 @@ class ElasticDriver:
 
 if __name__ == "__main__":
     driver = ElasticDriver()
-    driver.index_data('recipe_marmiton', './data/recipe_marmiton.json')
+    driver.index_data('recipe_marmiton', './data/recipe_marmiton_with_cluster.json')
     driver.index_data('items_ingredient', './data/items_ingredient.json')
 
 
