@@ -1,25 +1,43 @@
 <p>Voici le résultat de votre recheche :</p>
-<div>
-  <h2>{{recipe.name}}</h2>
-  <p>{{recipe.type}}</p>
+<div id="recipeInfo">
+  <img class=recipeIcon src="assets/salad.png" *ngIf="recipe.category=='Entree'" alt="Entry icon"/>
+  <img class=recipeIcon src="assets/meal.png" *ngIf="recipe.category=='Plat principal'" alt="Meal icon"/>
+  <img class=recipeIcon src="assets/dessert.png" *ngIf="recipe.category=='Dessert'" alt="Dessert icon"/>
+  <img class=recipeIcon src="assets/drink.png" *ngIf="recipe.category=='Boisson'" alt="Drink icon"/>
+  <img class=recipeIcon src="assets/onion-ring.png" *ngIf="recipe.category=='Aperitif'" alt="Finger Food icon"/>
+  <div>
+    <h2>{{recipe.name}} [{{sliderValue}} pers. | pce.]</h2>
+    <p class="second">{{recipe.category}}</p>
+    <mat-slider min="1" max="{{sliderMax}}" step="1" showTickMarks discrete>
+      <input matSliderThumb [(ngModel)]="sliderValue">
+    </mat-slider>
+    <p>Recette complète <a href="{{recipe.url}}" target="_blank">ici</a> !</p>
+  </div>
 </div>
-<div>
-  <h3>Ingrédients<sup>*</sup></h3>
+<mat-divider></mat-divider>
+<div id="ingredients">
+  <h3>Liste des ingrédients à acheter<sup>*</sup></h3>
   <table>
     <tr>
       <th>Ingrédient</th>
+      <th>Quantité</th>
+      <th>Article proposé</th>
+      <th>Pièce(s)</th>
       <th>Prix<sup>**</sup></th>
-      <th>Prix/kg</th>
-      <th>Article</th>
+      <th></th>
     </tr>
     <tr *ngFor="let item of recipe.ingredients">
       <td>{{item.name}}</td>
-      <td>{{item.price}}.-</td>
-      <td>{{item.price}}.-</td>
-      <td><button mat-raised-button (click)="window.open(item.link)"><mat-icon>shopping_cart</mat-icon></button></td>
+      <td>{{item.quantity}}</td>
+      <td>{{item.match.name}} (<span class="modify" (click)="openChangeDialog(item.name, item.others)">modifier</span>)</td>
+      <td>x{{computeNumberOfPieces(item)}}</td>
+      <td>{{(item.match.price * computeNumberOfPieces(item)).toFixed(2)}}</td>
+      <td><button mat-raised-button (click)="window.open(item.match.link)"><mat-icon>shopping_cart</mat-icon></button></td>
     </tr>
   </table>
 </div>
-<p class="info"><sup>*</sup> Les recettes sont tirée de Marmitton.fr</p>
-<p class="info"><sup>**</sup> Les prix sont basé sur Aldi.ch et USP.ch</p>
+<mat-divider></mat-divider>
+<p id="total"><span id="total_h">Prix à la caisse :</span> {{total}} CHF</p>
+<p class="info"><sup>*</sup> Les recettes sont tirées de Marmitton.fr</p>
+<p class="info"><sup>**</sup> Les prix sont basés sur Aldi.ch</p>
 <button mat-raised-button color="primary" (click)="clearRecipe.emit()">Nouvelle recherche</button>

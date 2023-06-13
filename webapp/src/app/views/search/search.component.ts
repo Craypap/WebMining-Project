@@ -26,6 +26,7 @@ export class SearchComponent {
       res => {
         this.isSearch = false;
         this.recipe = res;
+        console.log(this.recipe)
       },
       error => {
         this.isSearch = false;
@@ -57,7 +58,7 @@ export class SearchComponent {
         query: query,
       }
     });
-    dialogRef.disableClose = true
+    dialogRef.disableClose = true;
   }
 }
 

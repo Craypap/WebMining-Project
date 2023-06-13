@@ -31,6 +31,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from datetime import datetime
 from analyser.analyse import DataAnalyser
+from elasticdriver.price_analysis import PriceAnalysis
 from dataprocessing.dataprocesser import DataProcesser
 from elasticdriver.elastic import ElasticDriver
 
@@ -64,6 +65,7 @@ app.add_middleware(
 analyser: DataAnalyser = DataAnalyser()
 processer: DataProcesser = DataProcesser()
 db: ElasticDriver = ElasticDriver("localhost", 9200, "user", "password")
+fetcher: PriceAnalysis = PriceAnalysis()
 
 
 # Redirect to docs
@@ -82,25 +84,10 @@ async def startup_event():
 
 @app.get("/recipe/{query}")
 async def recipe(query: str):
-    if query == "test":
-        return {
-            "name": "Fondue au Fromage",
-            "type": "plat-principal",
-            "ingredients": [
-                {
-                    "name": "Fromage",
-                    "price": 5.0,
-                    "link": "https://google.ch"
-                },
-                {
-                    "name": "Pain",
-                    "price": 2.0,
-                    "link": "https://google.ch"
-                }
-            ]
-        }
-    else:
+    recipe: dict = fetcher.query_recipe(query)
+    if recipe is None:
         raise HTTPException(status_code=404, detail="Item not found")
+    return recipe
 
 
 @app.get("/date")

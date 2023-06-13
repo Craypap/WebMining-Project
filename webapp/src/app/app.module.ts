@@ -19,6 +19,9 @@ import {NgOptimizedImage} from "@angular/common";
 import { NotFoundDialogComponent } from './views/search/not-found-dialog/not-found-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {HttpClientModule} from "@angular/common/http";
+import {MatSliderModule} from "@angular/material/slider";
+import { ChangeDialogComponent } from './views/recipe/change-dialog/change-dialog.component';
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import {HttpClientModule} from "@angular/common/http";
     SearchComponent,
     RecipeComponent,
     HomeComponent,
-    NotFoundDialogComponent
+    NotFoundDialogComponent,
+    ChangeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +46,9 @@ import {HttpClientModule} from "@angular/common/http";
     MatProgressSpinnerModule,
     NgOptimizedImage,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSliderModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

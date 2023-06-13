@@ -11,3 +11,72 @@ p.info{
   margin: 2px;
   font-size: 8pt;
 }
+
+.second{
+  color: #808080;
+}
+
+img.recipeIcon{
+  height: 120px;
+  width: 120px;
+}
+
+div#recipeInfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+h2{
+  margin: 0;
+}
+
+div#recipeInfo div{
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  padding: 0 20px;
+}
+
+mat-slider {
+  width: 300px;
+}
+
+div#ingredients{
+  padding-top: 10px;
+}
+
+p#total{
+  padding: 20px 0;
+  font-size: 18pt;
+  text-decoration: underline;
+}
+
+span#total_h{
+  font-weight: bold;
+}
+
+div#slider{
+  display: inline;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+div#slider button{
+  width: 20px;
+}
+
+td{
+  padding: 0 5px;
+}
+
+th{
+  padding: 0 5px;
+}
+
+span.modify{
+  color: rgb(67, 80, 175);
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -1,0 +1,14 @@
+<h2>Modifier l'article pour l'ingrédient "{{data.name}}"</h2>
+<mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  class="example-radio-group"
+  [(ngModel)]="choice">
+  <mat-radio-button class="example-radio-button" *ngFor="let c of data.choices" [value]="c">
+    {{c}}
+  </mat-radio-button>
+</mat-radio-group>
+<div mat-dialog-actions class="buttons">
+  <button mat-flat-button color="warn" (click)="closeDialog(false)">Annuler</button>
+  <button mat-flat-button color="primary" (click)="closeDialog(true)">Changer</button>
+</div>
+

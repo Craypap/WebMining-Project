@@ -31,9 +31,11 @@ import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+
 class PriceAnalysis:
-    def __init__(self, host='localhost', port=9200, scheme='http', user: str='user', password: str='password'):
-        self.elastic = Elasticsearch(hosts=[{'host': host, 'port': port, 'scheme': scheme}], basic_auth=(user, password))
+    def __init__(self, host='localhost', port=9200, scheme='http', user: str = 'user', password: str = 'password'):
+        self.elastic = Elasticsearch(hosts=[{'host': host, 'port': port, 'scheme': scheme}],
+                                     basic_auth=(user, password))
 
     def get_price_from_ingredient(self, ingredient_name, index_name):
         """
@@ -62,6 +64,76 @@ class PriceAnalysis:
 
         # Return all matches
         return [hit['_source'] for hit in res['hits']['hits']]
+
+    def get_price_from_ingredient_aldi(self, ingredient_name, index_name):
+        """
+        Get the price of the ingredient from the elastic search index only from aldi
+        :param ingredient_name: string
+        :param index_name: string
+        :return: List of Dicts
+        """
+        # Prepare the search query
+        query = {
+            "query": {
+                "bool": {
+                    "should": [
+                        {"match": {"name": ingredient_name}},
+                        {"match": {"source": "ALDI"}}
+                    ]
+                }
+            }
+        }
+
+        res = self.elastic.search(index=index_name, body=query)
+
+        # If no match found, return empty list
+        if res['hits']['total']['value'] == 0:
+            return []
+
+        # Return best match and all other matches
+        return [res['hits']['hits'][0]['_source'], res['hits']['hits']]
+
+    @staticmethod
+    def parse_recipe_quantity(quantity_str: str) -> float:
+        """
+        Method to parse the quantity of a recipe ingredient into a kg quantity
+        If return is , it mean that is an invariant and always purchase one time the product
+        """
+
+        PIECE_KG = 0.2  # Weigh to use when the quantity is in piece on there is no unit
+
+        quantity_str = quantity_str.lower()
+        quantity_str = quantity_str.strip()
+        if quantity_str == "":
+            return 0
+        # split one time the quantity string
+        quantity_list = quantity_str.split(' ', 1)
+
+        # check if there is a unit in the quantity string
+        if len(quantity_list) == 1:
+            return float(quantity_list[0]) * PIECE_KG
+
+        if quantity_list[1] == 'g':
+            return float(quantity_list[0]) / 1000
+        elif quantity_list[1] == 'kg':
+            return float(quantity_list[0])
+        elif quantity_list[1] == 'l':
+            return float(quantity_list[0]) * 1.03
+        elif quantity_list[1] == 'cl':
+            return float(quantity_list[0]) * 0.01
+        elif quantity_list[1] == 'ml':
+            return float(quantity_list[0]) * 0.001
+        elif quantity_list[1] == 'verres':
+            return float(quantity_list[0]) * 0.2
+        elif quantity_list[1] == 'petite tasse':
+            return float(quantity_list[0]) * 0.1
+        elif quantity_list[1] == 'cuillère':
+            return float(quantity_list[0]) * 0.005
+        else:
+            return 0  # consider as invariant
+
+
+
 
     @staticmethod
     def get_price_by_quantity(quantity_str, price):
@@ -152,6 +224,44 @@ class PriceAnalysis:
         print(f'Total cost for USP:')
         for key, value in total_cost_usp.items():
             print(f'{key}: {value}')
+
+    def query_recipe(self, query: str, recipe_index: str = 'recipe_marmiton', price_index='items_ingredient'):
+        # prepare the search query
+        query = {
+            "query": {
+                "match": {
+                    "name": query
+                }
+            }
+        }
+        # get the recipe from the elastic search
+        res = self.elastic.search(index=recipe_index, body=query)
+        # keep the best match
+        best_match = res['hits']['hits'][0]['_source'] if res['hits']['total']['value'] > 0 else None
+        # query each ingredient and keep the best match
+        for i in range(len(best_match['ingredients'])):
+            prices, others = self.get_price_from_ingredient_aldi(best_match['ingredients'][i]['name'], price_index)
+            # keep 6 first results and add them to the return object
+            others = others[:6]
+            tmp: list = []
+            for o in others:
+                # check to have only Aldi results
+                if o['_source']['source'] != 'ALDI':
+                    continue
+                # compute quantity price with price per kg
+                item_quantity = prices['price'] / prices['price_kg']
+                o['_source']['quantity'] = item_quantity
+                tmp.append(o['_source'])
+            best_match['ingredients'][i]['others'] = tmp
+            # compute quantity price with price per kg
+            item_quantity = prices['price']/prices['price_kg']
+            # add to the return object
+            best_match['ingredients'][i]['quantity_kg'] = self.parse_recipe_quantity(best_match['ingredients'][i]['quantity'])
+            best_match['ingredients'][i]['match'] = prices
+            best_match['ingredients'][i]['match']['quantity'] = item_quantity
+
+
+        return best_match
 
 
 if __name__ == "__main__":
