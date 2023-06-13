@@ -6,6 +6,7 @@ from sklearn.cluster import KMeans
 PATH_COST = "./data/recipe_costs.json"
 PATH_RECIPES = "./data/recipe_marmiton.json"
 PATH_RECIPES_OUTPUT = "./data/recipe_marmiton_with_cluster.json"
+NBR_CLUSTER = 3
 
 
 # change the id of the cluster so the number 0 is the lowest price and it goes up from there
@@ -61,8 +62,8 @@ def main():
     df_USP = pd.DataFrame(recipe_USP_prices, columns=['recipe_name', 'USP_price'])
 
     # set up clustering Kmean for the prices
-    kmeans_ALDI = KMeans(n_clusters=5, random_state=0).fit(df_ALDI[['Aldi_price']])
-    kmeans_USP = KMeans(n_clusters=5, random_state=0).fit(df_USP[['USP_price']])
+    kmeans_ALDI = KMeans(n_clusters=NBR_CLUSTER, random_state=0).fit(df_ALDI[['Aldi_price']])
+    kmeans_USP = KMeans(n_clusters=NBR_CLUSTER, random_state=0).fit(df_USP[['USP_price']])
 
     # add the cluster labels to the dataframe
     df_ALDI['kmeans_cluster'] = kmeans_ALDI.labels_
