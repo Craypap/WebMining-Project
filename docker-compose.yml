@@ -33,6 +33,17 @@ services:
       - elastic
     depends_on:
       - es-eval01
+  frontend:
+    build: ./webapp
+    ports:
+      - "80:80"
+  backend:
+    build: ./code
+    ports:
+      - "8000:80"
+    depends_on:
+      - es-eval01
+
 
 volumes:
   es-eval01-data:
