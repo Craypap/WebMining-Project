@@ -6,7 +6,24 @@
   <img class=recipeIcon src="assets/drink.png" *ngIf="recipe.category=='Boisson'" alt="Drink icon"/>
   <img class=recipeIcon src="assets/onion-ring.png" *ngIf="recipe.category=='Aperitif'" alt="Finger Food icon"/>
   <div>
-    <h2>{{recipe.name}} [{{sliderValue}} pers. | pce.]</h2>
+    <h2>
+      {{recipe.name}} [{{sliderValue}} pers. | pce.]
+      <span *ngIf="recipe.ALDI_cluster == 0">
+        <img class="dollar" src="assets/dollar.png" alt="dollar_icon">
+        <img class="dollar" src="assets/dollar_hidden.png" alt="dollar_icon">
+        <img class="dollar" src="assets/dollar_hidden.png" alt="dollar_icon">
+      </span>
+      <span *ngIf="recipe.ALDI_cluster == 1">
+        <img class="dollar" src="assets/dollar.png" alt="dollar_icon">
+        <img class="dollar" src="assets/dollar.png" alt="dollar_icon">
+        <img class="dollar" src="assets/dollar_hidden.png" alt="dollar_icon">
+      </span>
+      <span *ngIf="recipe.ALDI_cluster == 2">
+        <img class="dollar" src="assets/dollar.png" alt="dollar_icon">
+        <img class="dollar" src="assets/dollar.png" alt="dollar_icon">
+        <img class="dollar" src="assets/dollar.png" alt="dollar_icon">
+      </span>
+    </h2>
     <p class="second">{{recipe.category}}</p>
     <mat-slider min="1" max="{{sliderMax}}" step="1" showTickMarks discrete>
       <input matSliderThumb [(ngModel)]="sliderValue">

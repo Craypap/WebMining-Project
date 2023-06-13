@@ -60,5 +60,13 @@ export class SearchComponent {
     });
     dialogRef.disableClose = true;
   }
+
+  scrape(){
+    this.req.scrape().subscribe(
+      res => {
+        alert("Données Actualisées !")
+      }
+    );
+  }
 }
 
