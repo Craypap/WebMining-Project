@@ -88,6 +88,7 @@ async def startup_event():
     driver = ElasticDriver()
 
     # Index the data using the index_data method
+    # todo lignes à uncomment pour indexer les données
     # driver.index_data('items_ingredient', '../data/items_ingredient.json')
     # driver.index_data('recipe_marmiton', '../data/recipe_marmiton.json')
 
