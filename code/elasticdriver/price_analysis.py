@@ -116,11 +116,18 @@ class PriceAnalysis:
         if len(quantity_list) == 1:
             return float(quantity_list[0]) * PIECE_KG
 
+        # convert frational string to float
+        if '/' in quantity_list[0]:
+            fraction = quantity_list[0].split('/')
+            quantity_list[0] = float(fraction[0]) / float(fraction[1])
+            print(quantity_list[0])
+
         if quantity_list[1] == 'g':
             return float(quantity_list[0]) / 1000
         elif quantity_list[1] == 'kg':
             return float(quantity_list[0])
         elif quantity_list[1] == 'l':
+            print(float(quantity_list[0]) * 1.03)
             return float(quantity_list[0]) * 1.03
         elif quantity_list[1] == 'cl':
             return float(quantity_list[0]) * 0.01

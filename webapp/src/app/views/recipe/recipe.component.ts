@@ -56,6 +56,13 @@ export class RecipeComponent implements OnChanges, OnInit, OnDestroy{
     quantity = quantity.trim();
     if(quantity == '') return '';
     let tmp = quantity.split(' ', 2);
+    // check if quantity is a fraction
+    if(tmp[0].includes('/')){
+      let frac = tmp[0].split('/');
+      let num = parseFloat(frac[0]);
+      let den = parseFloat(frac[1]);
+      tmp[0] = (num/den).toString();
+    }
     //check if quantity is a number
     let t = (parseFloat(tmp[0]) * factor).toFixed(2);
     if (parseFloat(t)%1 == 0) t = parseInt(t).toString();
