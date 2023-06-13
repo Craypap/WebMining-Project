@@ -34,6 +34,9 @@ from analyser.analyse import DataAnalyser
 from elasticdriver.price_analysis import PriceAnalysis
 from dataprocessing.dataprocesser import DataProcesser
 from elasticdriver.elastic import ElasticDriver
+from threading import Thread
+import os
+
 
 api_description = """
 Return the price estimation of a recipe scraped from Marmiton website
@@ -78,8 +81,15 @@ async def root():
 async def startup_event():
     # TODO : Code before API up (run scraper, ...)
     print("------ Processing data scraped... ------")
-    # processer.parse_usp("scraper/usp_output.json")
-    print("------ Data processed ------------------")
+    # Import the ElasticDriver class
+    from elasticdriver.elastic import ElasticDriver
+
+    # Instantiate the ElasticDriver object
+    driver = ElasticDriver()
+
+    # Index the data using the index_data method
+    # driver.index_data('items_ingredient', '../data/items_ingredient.json')
+    # driver.index_data('recipe_marmiton', '../data/recipe_marmiton.json')
 
 
 @app.get("/recipe/{query}")
@@ -88,6 +98,44 @@ async def recipe(query: str):
     if recipe is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return recipe
+
+@app.get("/scrape")
+async def scrape():
+    def run_scraper():
+        print("Start scrape!!!")
+        result= os.system('cd scraper && scrapy crawl aldi -O ../../data/aldi.json')
+        if result == 0:  # command executed successfully
+            print("Scraping completed successfully. Starting post-processing...")
+            # # Instantiate the DataProcesser object
+            data_processor = DataProcesser()
+
+            # Provide the path to the aldi.json file
+            path_to_aldi_json = '../data/aldi.json'
+
+            data_processor.clean_aldi_data(path_to_aldi_json)
+
+            # Call the parse_aldi method
+            data_processor.parse_aldi('../data/aldi_clean.json')
+
+            data_processor.parse_marmiton('../data/recipe_marmiton.json')
+
+            # Import the ElasticDriver class
+            from elasticdriver.elastic import ElasticDriver
+
+            # Instantiate the ElasticDriver object
+            driver = ElasticDriver()
+
+            # Index the data using the index_data method
+            driver.index_data('items_ingredient', '../data/items_ingredient.json')
+
+            with open("last_action_timestamp.txt", "w") as f:
+                f.write(str(int(datetime.now().timestamp())))
+        else:  # command execution failed
+            print("Scraping failed. Post-processing is not started.")
+
+    thread = Thread(target=run_scraper)
+    thread.start()
+    return {"status": "Scraping started"}
 
 
 @app.get("/date")

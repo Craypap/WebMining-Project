@@ -51,6 +51,13 @@ class ElasticDriver:
         @param index_name: Name of the index
         @param file_path: Path to the JSON data file
         """
+
+        # Check if the index already exists
+        if self.elastic.indices.exists(index=index_name):
+            # Delete the index if it exists
+            self.elastic.indices.delete(index=index_name)
+            print(f"Deleted existing index: {index_name}")
+
         # Open and load JSON data file
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)

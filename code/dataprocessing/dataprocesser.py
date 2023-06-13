@@ -34,7 +34,7 @@ import json
 import os
 
 class DataProcesser:
-    OUTPUT_PATH: str = "./data/"
+    OUTPUT_PATH: str = "./../data/"
     SOURCE_MARMITON: str = "Marmiton"
     SOURCE_USP: str = "USP"
     SOURCE_ALDI: str = "ALDI"
@@ -114,6 +114,23 @@ class DataProcesser:
         
         print(f"Nombre d'éléments dans le fichier d'entrée : {len(data)}")
         print(f"Nombre d'éléments dans le fichier de sortie (sans doublons): {len(new_data)}")
+
+    def clean_aldi_data(self, path_to_json: str) -> None:
+        """
+        This method removes duplicates from Aldi data and saves cleaned data to a new file
+        :param path_to_json: path to the json file with data scraped from Aldi
+        """
+        with open(path_to_json, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        # Remove duplicates (assuming that your data is a list of dictionaries)
+        cleaned_data = list({json.dumps(d, sort_keys=True): d for d in data}.values())
+
+        # Save cleaned data
+        with open(path_to_json.replace('.json', '_clean.json'), 'w', encoding='utf-8') as f:
+            json.dump(cleaned_data, f)
+
+        print(f"Removed {len(data) - len(cleaned_data)} duplicates from Aldi data.")
 
 
     def parse_usp(self, path_to_json: str) -> None:
@@ -333,10 +350,10 @@ class DataProcesser:
         outfile.close()
 
 
-
 def main():
     # test
     dp = DataProcesser()
+    dp.clean_aldi_data('./code/scraper/aldi.json')
     path_to_aldi_json = './code/scraper/aldi.json'
     dp.parse_aldi(path_to_aldi_json)
     path_to_usp_json = './code/scraper/usp_output.json'
