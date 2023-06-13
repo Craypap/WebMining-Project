@@ -80,3 +80,11 @@ span.modify{
   text-decoration: underline;
   cursor: pointer;
 }
+
+img.dollar{
+  width: 25px;
+  height: 25px;
+  display: inline;
+  position: relative;
+  top: 5px;
+}

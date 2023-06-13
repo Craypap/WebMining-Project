@@ -138,12 +138,21 @@ async def scrape():
     return {"status": "Scraping started"}
 
 
+@app.get("/price}")
+async def recipe(query: str):
+    recipe: dict = fetcher.query_recipe(query)
+    if recipe is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return recipe
+
+
 @app.get("/date")
 async def last_action_date():
     # read value from last_action_date.txt
     timestamp: int
     with open("last_action_timestamp.txt", "r") as f:
         timestamp = int(f.read())
+        
     # convert timestamp to date
     dt_object = datetime.fromtimestamp(timestamp)
     # return date

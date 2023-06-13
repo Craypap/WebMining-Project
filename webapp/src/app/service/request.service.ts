@@ -33,4 +33,12 @@ export class RequestService {
   get_date(): Observable<any> {
     return this.http.get<any>(this.baseUrl + "/date")
   }
+
+  /**
+   * Scrape the prices again
+   */
+  scrape(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + "/scrape")
+  }
+
 }

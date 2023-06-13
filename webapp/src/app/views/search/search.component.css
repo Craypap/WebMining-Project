@@ -33,3 +33,9 @@ p#actuation{
   margin: 5px;
   text-align: center;
 }
+
+span#actu{
+  color: rgb(67, 80, 175);
+  text-decoration: underline;
+  cursor: pointer;
+}

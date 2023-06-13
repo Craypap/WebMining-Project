@@ -31,7 +31,7 @@ from elasticsearch import Elasticsearch
 
 class ElasticDriver:
 
-    def __init__(self, host: str='localhost', port: int=9200, user: str='user', password: str='password', scheme: str='http'):
+    def __init__(self, host: str='es-eval01', port: int=9200, user: str='user', password: str='password', scheme: str='http'):
         """
         Constructor
 
@@ -70,7 +70,7 @@ class ElasticDriver:
 
 if __name__ == "__main__":
     driver = ElasticDriver()
-    driver.index_data('recipe_marmiton', './data/recipe_marmiton.json')
+    driver.index_data('recipe_marmiton', './data/recipe_marmiton_with_cluster.json')
     driver.index_data('items_ingredient', './data/items_ingredient.json')
 
 
