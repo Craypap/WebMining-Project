@@ -25,6 +25,8 @@ def change_cluster_id(df, name_prev_column_cluster:str, name_price_column:str, n
 
 # print the range of the cluster and the number of recipes in the cluster
 def print_range_clustering(df_ALDI, df_USP):
+    print("The range of the cluster and the number of recipes in the cluster:")
+    print("ALDI:")
     # build an dictionnary of the details of the recipes so it's like that : kmean: {cluster: {range min : range max}, count: {count of recipes in the cluster}}
     kmeans_ALDI_details = {}
     for cluster in df_ALDI['kmeans_cluster_price'].unique():
@@ -35,6 +37,7 @@ def print_range_clustering(df_ALDI, df_USP):
     kmeans_ALDI_details = dict(sorted(kmeans_ALDI_details.items()))
     print(kmeans_ALDI_details)
     # USP
+    print("USP:")
     kmens_USP_details = {}
     for cluster in df_USP['kmeans_cluster_price'].unique():
         kmens_USP_details[cluster] = {}
