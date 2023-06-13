@@ -104,11 +104,7 @@ async def last_action_date():
     timestamp: int
     with open("last_action_timestamp.txt", "r") as f:
         timestamp = int(f.read())
-
-    # erase and write in last_action_date.txt
-    with open("last_action_timestamp.txt", "w") as f:
-        f.write(str(int(datetime.now().timestamp())))
-
+        
     # convert timestamp to date
     dt_object = datetime.fromtimestamp(timestamp)
     # return date
