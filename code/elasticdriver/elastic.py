@@ -31,7 +31,7 @@ from elasticsearch import Elasticsearch
 
 class ElasticDriver:
 
-    def __init__(self, host: str='es-eval01', port: int=9200, user: str='user', password: str='password', scheme: str='http'):
+    def __init__(self, host: str='localhost', port: int=9200, user: str='user', password: str='password', scheme: str='http'):
         """
         Constructor
 

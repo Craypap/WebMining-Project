@@ -25,12 +25,9 @@ In addition, the Aldi prices and the recommended prices will be compared.
 
 ## Requirement 
 
-Python 3.x
-Scrapy
-The Scrapy Python package is required for data scraping from the websites. It can be installed using pip:
-```
-pip install scrapy
-```
+- Python 3.10
+- Docker with docker-compose
+- (ports 80 / 8000 / 9200 / 9300 free)
 
 ## Structure
 The project contains several directories:
@@ -40,3 +37,25 @@ The project contains several directories:
 - doc — Includes documentation files explaining the project and its use.
 - scrap_project_recipe — Contains the Scrapy spiders used for scraping data from the websites.
 - webapp — Contains the source code for the web application interface.
+
+## Installation
+Follow the steps below to install the project.
+
+### 1. Clone the repository
+Clone the repository to your local machine using the following command:
+```bash
+git clone https://gitlab.forge.hefr.ch/florian.hofmann/webm-projet.git
+```
+
+### 2. Start Elasticsearch and the web application
+Run the following command to start Elasticsearch and the web application:
+```bash
+docker-compose up
+```
+
+### 3. Start the API
+Go on the code directory and run the following command to install all python requirements and start the API:
+```bash
+pip install -r requirements.txt
+python api.py
+```

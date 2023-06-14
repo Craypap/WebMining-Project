@@ -64,7 +64,7 @@ export class SearchComponent {
   scrape(){
     this.req.scrape().subscribe(
       res => {
-        alert("Données Actualisées !")
+        alert("Données en cours d'actualisation !")
       }
     );
   }

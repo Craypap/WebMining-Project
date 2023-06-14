@@ -37,7 +37,6 @@ from elasticdriver.elastic import ElasticDriver
 from threading import Thread
 import os
 
-
 api_description = """
 Return the price estimation of a recipe scraped from Marmiton website
 """
@@ -67,7 +66,7 @@ app.add_middleware(
 # components
 analyser: DataAnalyser = DataAnalyser()
 processer: DataProcesser = DataProcesser()
-db: ElasticDriver = ElasticDriver("localhost", 9200, "user", "password")
+db: ElasticDriver = ElasticDriver()
 fetcher: PriceAnalysis = PriceAnalysis()
 
 
@@ -79,18 +78,14 @@ async def root():
 
 @app.on_event("startup")
 async def startup_event():
-    # TODO : Code before API up (run scraper, ...)
-    print("------ Processing data scraped... ------")
-    # Import the ElasticDriver class
-    from elasticdriver.elastic import ElasticDriver
-
-    # Instantiate the ElasticDriver object
-    driver = ElasticDriver()
-
+    # check if data is already indexed
+    if not os.path.exists("./.indexed"):
+        return
     # Index the data using the index_data method
-    # todo lignes à uncomment pour indexer les données
-    # driver.index_data('items_ingredient', '../data/items_ingredient.json')
-    # driver.index_data('recipe_marmiton', '../data/recipe_marmiton.json')
+    db.index_data('items_ingredient', '../data/items_ingredient.json')
+    db.index_data('recipe_marmiton', '../data/recipe_marmiton.json')
+    # create .indexed file to avoid reindexing
+    open("./.indexed", "w").close()
 
 
 @app.get("/recipe/{query}")
@@ -100,11 +95,12 @@ async def recipe(query: str):
         raise HTTPException(status_code=404, detail="Item not found")
     return recipe
 
+
 @app.get("/scrape")
 async def scrape():
     def run_scraper():
         print("Start scrape!!!")
-        result= os.system('cd scraper && scrapy crawl aldi -O ../../data/aldi.json')
+        result = os.system('cd scraper && scrapy crawl aldi -O ../../data/aldi.json')
         if result == 0:  # command executed successfully
             print("Scraping completed successfully. Starting post-processing...")
             # # Instantiate the DataProcesser object
@@ -153,7 +149,7 @@ async def last_action_date():
     timestamp: int
     with open("last_action_timestamp.txt", "r") as f:
         timestamp = int(f.read())
-        
+
     # convert timestamp to date
     dt_object = datetime.fromtimestamp(timestamp)
     # return date
