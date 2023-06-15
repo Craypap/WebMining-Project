@@ -83,7 +83,7 @@ async def startup_event():
         return
     # Index the data using the index_data method
     db.index_data('items_ingredient', '../data/items_ingredient.json')
-    db.index_data('recipe_marmiton', '../data/recipe_marmiton.json')
+    db.index_data('recipe_marmiton', '../data/recipe_marmiton_with_cluster.json')
     # create .indexed file to avoid reindexing
     open("./.indexed", "w").close()
 
