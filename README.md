@@ -53,8 +53,15 @@ docker-compose up
 ```
 
 ### 3. Start the API
-Go on the code directory and run the following command to install all python requirements and start the API:
+Go on the code directory and run the following command to install all python requirements and start the API :
 ```bash
 pip install -r requirements.txt
 python api.py
+```
+It might take something like 10-20min to index the data for the first time. During those time it's still possible to make some search but nothing will be find.
+
+### 4. Access the app
+After the consol has finished the indexation, access the app using your favorit web browser like Firefox or Chrome and go to the link bellow to search for your favorite recipe :
+```bash
+localhost:80/
 ```
