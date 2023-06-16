@@ -79,8 +79,9 @@ async def root():
 @app.on_event("startup")
 async def startup_event():
     # check if data is already indexed
-    if not os.path.exists("./.indexed"):
+    if os.path.exists("./.indexed"):
         return
+    print("Creating index...")
     # Index the data using the index_data method
     db.index_data('items_ingredient', '../data/items_ingredient.json')
     db.index_data('recipe_marmiton', '../data/recipe_marmiton_with_cluster.json')
